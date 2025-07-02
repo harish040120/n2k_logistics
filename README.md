@@ -1,7 +1,7 @@
 # 🚚 N2K Logistics Management System
 
 <div align="center">
-  <img src="frontend/public/N2K_LOGO_SVG.svg" alt="N2K Logistics Logo" width="200"/>
+  <img src="frontend/asstes/logo.png" alt="N2K Logistics Logo" width="200"/>
   
   [![React](https://img.shields.io/badge/React-18.3.1-blue.svg)](https://reactjs.org/)
   [![Node.js](https://img.shields.io/badge/Node.js-Latest-green.svg)](https://nodejs.org/)
