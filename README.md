@@ -1,4 +1,4 @@
-# 🚚 N2K Logistics Management System
+# N2K Logistics Management System
 
 <div align="center">
   <img src="frontend/assets/logo.png" alt="N2K Logistics Logo" width="200"/>
@@ -10,7 +10,7 @@
   [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 </div>
 
-## 📋 Table of Contents
+## Table of Contents
 - [About N2K Logistics](#about-n2k-logistics)
 - [Features](#features)
 - [Tech Stack](#tech-stack)
@@ -23,14 +23,14 @@
 - [Contributing](#contributing)
 - [License](#license)
 
-## 🏢 About N2K Logistics
+## About N2K Logistics
 
 **N2K Logistics** is a comprehensive logistics management platform designed to streamline delivery operations, track shipments, and manage fleet logistics efficiently. Our system provides real-time tracking, automated notifications, and comprehensive reporting for modern logistics operations.
 
-### 🎯 Mission Statement
+### Mission Statement
 To revolutionize logistics management through innovative technology solutions that enhance operational efficiency, improve customer satisfaction, and drive business growth.
 
-### 🌟 Why Choose N2K Logistics?
+### Why Choose N2K Logistics?
 - **Real-time Tracking**: Monitor shipments and deliveries in real-time
 - **Automated Notifications**: Keep customers informed with SMS and email updates
 - **Comprehensive Dashboard**: Admin, driver, and customer portals
@@ -38,45 +38,45 @@ To revolutionize logistics management through innovative technology solutions th
 - **Route Optimization**: Smart delivery route planning
 - **Financial Tracking**: Complete accounting and billing system
 
-## ✨ Features
+## Features
 
-### 🔐 Multi-Role Authentication
+### Multi-Role Authentication
 - **Admin Portal**: Complete system management and oversight
 - **Driver Portal**: Mobile-friendly interface for drivers
 - **Agent Portal**: Streamlined order management
 - **Customer Tracking**: Real-time shipment tracking
 
-### 📊 Advanced Dashboard
+### Advanced Dashboard
 - Real-time delivery status monitoring
 - Interactive charts and analytics
 - Performance metrics and KPIs
 - Route optimization visualization
 
-### 🚛 Fleet Management
+### Fleet Management
 - Vehicle registration and management
 - Driver allocation and scheduling
 - Maintenance tracking
 - Fuel management
 
-### 📱 Communication System
+### Communication System
 - Automated SMS notifications via Twilio
 - Email notifications via EmailJS
 - Real-time status updates
 - Customer feedback system
 
-### 💼 Financial Management
+### Financial Management
 - Order billing and invoicing
 - Vehicle accounts and expenses
 - Labour management
 - Fixed assets tracking
 
-### 📍 Delivery Management
+### Delivery Management
 - Hub-based delivery allocation
 - Delivery point management
 - Route optimization
 - Proof of delivery
 
-## 🛠 Tech Stack
+## Tech Stack
 
 ### Frontend
 - **Framework**: React 18.3.1
@@ -114,7 +114,7 @@ To revolutionize logistics management through innovative technology solutions th
 - **Package Manager**: npm
 - **Version Control**: Git
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 N2K_Final/
@@ -151,7 +151,7 @@ N2K_Final/
 └── README.md
 ```
 
-## 🚀 Installation
+## Installation
 
 ### Prerequisites
 - Node.js (v16 or higher)
@@ -211,7 +211,7 @@ Run the SQL scripts from `dbcreation.txt` to set up your database schema.
 ### 4. Firebase Configuration
 Update `src/config.js` with your Firebase configuration.
 
-## 🎯 Usage
+## Usage
 
 ### Development Mode
 
@@ -244,7 +244,7 @@ npm run build
 npm run preview
 ```
 
-## 📚 API Documentation
+## API Documentation
 
 ### Authentication Endpoints
 - `POST /api/auth/admin` - Admin login
@@ -268,7 +268,7 @@ npm run preview
 - `PUT /api/vehicles/:id` - Update vehicle
 - `DELETE /api/vehicles/:id` - Remove vehicle
 
-## 📱 User Interfaces
+## User Interfaces
 
 ### Admin Dashboard
 - **Order Management**: Create, update, and track all orders
@@ -289,7 +289,7 @@ npm run preview
 - **Notifications**: SMS and email updates
 - **Feedback System**: Rate delivery experience
 
-## 🔧 Key Features Implementation
+## Key Features Implementation
 
 ### Real-time Notifications
 ```javascript
@@ -320,7 +320,7 @@ export function allocateVehicle(orderRequirements) {
 }
 ```
 
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions to the N2K Logistics platform! Please follow these steps:
 
@@ -337,12 +337,12 @@ We welcome contributions to the N2K Logistics platform! Please follow these step
 - Add comments for complex logic
 - Test thoroughly before submitting
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - React team for the amazing framework
 - Tailwind CSS for the utility-first CSS framework
