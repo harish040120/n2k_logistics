@@ -465,21 +465,39 @@ export default function PlaceOrderForm({ onClose }) {
     const receiptContent = document.getElementById("receipt-template");
     receiptContent.style.display = "block";
 
-    html2canvas(receiptContent).then((canvas) => {
-      const imgData = canvas.toDataURL("image/png");
+    // Create a clone of the receipt to improve quality
+    const clone = receiptContent.cloneNode(true);
+    clone.style.position = "absolute";
+    clone.style.left = "-9999px";
+    clone.style.display = "block";
+    clone.style.transform = "scale(2)"; // Scale up for better quality
+    clone.style.transformOrigin = "top left";
+    document.body.appendChild(clone);
+
+    html2canvas(clone, {
+      scale: 2, // Higher scale for better quality
+      logging: false,
+      useCORS: true,
+      letterRendering: true,
+      allowTaint: true
+    }).then((canvas) => {
+      document.body.removeChild(clone);
+      
+      const imgData = canvas.toDataURL("image/png", 1.0);
       const pdf = new jsPDF("p", "mm", "a4");
       const imgWidth = 190;
+      const pageHeight = 297;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
       
-      // Calculate position for the first receipt (top of the page)
+      // Calculate positions for two receipts
       const firstReceiptY = 10;
-      
-      // Calculate position for the second receipt (below the first with some margin)
+      const secondReceiptY = firstReceiptY + imgHeight + 5;
       
       // Add first receipt
       pdf.addImage(imgData, "PNG", 10, firstReceiptY, imgWidth, imgHeight);
       
-      // Add second receipt
+      // Add second receipt (duplicate)
+      pdf.addImage(imgData, "PNG", 10, secondReceiptY, imgWidth, imgHeight);
       
       pdf.save(`N2K_Logistics_Receipt_${lrNumber}.pdf`);
       receiptContent.style.display = "none";
@@ -490,8 +508,25 @@ export default function PlaceOrderForm({ onClose }) {
     const receiptContent = document.getElementById("receipt-template");
     receiptContent.style.display = "block";
 
-    html2canvas(receiptContent).then((canvas) => {
-      const imgData = canvas.toDataURL("image/png");
+    // Create a clone of the receipt to improve quality
+    const clone = receiptContent.cloneNode(true);
+    clone.style.position = "absolute";
+    clone.style.left = "-9999px";
+    clone.style.display = "block";
+    clone.style.transform = "scale(2)";
+    clone.style.transformOrigin = "top left";
+    document.body.appendChild(clone);
+
+    html2canvas(clone, {
+      scale: 2,
+      logging: false,
+      useCORS: true,
+      letterRendering: true,
+      allowTaint: true
+    }).then((canvas) => {
+      document.body.removeChild(clone);
+      
+      const imgData = canvas.toDataURL("image/png", 1.0);
       const windowContent = `<!DOCTYPE html>
         <html>
           <head>
@@ -513,32 +548,41 @@ export default function PlaceOrderForm({ onClose }) {
               }
               .receipt-duplicate {
                 width: 190mm;
-                margin-bottom: 20mm;
+                margin-bottom: 5mm;
                 page-break-after: always;
               }
               .receipt-duplicate:last-child {
                 page-break-after: auto;
                 margin-bottom: 0;
               }
+              img {
+                width: 100%;
+                height: auto;
+              }
             </style>
           </head>
           <body>
             <div class="receipt-container">
               <div class="receipt-duplicate">
-                <img src="${imgData}" style="width:100%;" />
+                <img src="${imgData}" />
               </div>
               <div class="receipt-duplicate">
-                <img src="${imgData}" style="width:100%;" />
+                <img src="${imgData}" />
               </div>
             </div>
+            <script>
+              window.onload = function() {
+                setTimeout(function() {
+                  window.print();
+                }, 500);
+              };
+            </script>
           </body>
         </html>`;
       const printWindow = window.open("", "", "width=800,height=1123");
       printWindow.document.write(windowContent);
       printWindow.document.close();
-      printWindow.focus();
-      printWindow.print();
-
+      
       receiptContent.style.display = "none";
     });
   };
@@ -795,143 +839,141 @@ export default function PlaceOrderForm({ onClose }) {
           id="receipt-template"
           style={{
             display: "none",
-            padding: "20px",
+            padding: "5px",
             fontFamily: "Arial, sans-serif",
             backgroundColor: "#fff",
             width: "190mm",
-            minHeight: "140mm",
+            height: "140mm",
             margin: "auto",
+            fontSize: "12px",
+            position: "relative",
+            boxSizing: "border-box"
           }}
         >
           {/* Logo and Header Section */}
           <div style={{
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "stretch", // Makes all children equal height
-  marginBottom: "20px",
-  gap: "15px",
-  height: "100px" // Fixed height matching logo
-}}>
-  {/* Logo Box - Fixed Size */}
-  <div style={{
-    border: "1px solid #e0e0e0",
-    borderRadius: "5px",
-    padding: "10px",
-    width: "100px",
-    height: "100%", // Takes full parent height
-    backgroundColor: "#f8f9fa",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center"
-  }}>
-    <img 
-      src={logo} 
-      alt="N2K Logistics Logo" 
-      style={{ 
-        maxWidth: "100%",
-        maxHeight: "100%",
-        objectFit: "contain"
-      }}
-    />
-  </div>
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: "10px",
+            gap: "10px"
+          }}>
+            {/* Logo Box */}
+            <div style={{
+              border: "1px solid #e0e0e0",
+              borderRadius: "5px",
+              padding: "5px",
+              width: "80px",
+              height: "80px",
+              backgroundColor: "#f8f9fa",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center"
+            }}>
+              <img 
+                src={logo} 
+                alt="N2K Logistics Logo" 
+                style={{ 
+                  maxWidth: "100%",
+                  maxHeight: "100%",
+                  objectFit: "contain"
+                }}
+              />
+            </div>
 
-  {/* Company Details Box - Flexible Width */}
-  <div style={{
-    flex: 1,
-    border: "1px solid #e0e0e0",
-    borderRadius: "5px",
-    padding: "15px",
-    height: "100%", // Matches logo height
-    backgroundColor: "#f8f9fa",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center"
-  }}>
-    <div style={{ 
-      fontSize: "18px", 
-      fontWeight: "bold", 
-      color: "#2c3e50",
-      textTransform: "uppercase",
-      letterSpacing: "1px",
-      marginBottom: "4px",
-      textAlign: "center"
-    }}>
-      N2K LOGISTICS
-    </div>
-    
-    <div style={{ 
-      fontSize: "10px", 
-      color: "#555",
-      lineHeight: "1.4",
-      textAlign: "center"
-    }}>
-      <div>H.O : S.F. No. 1/54/2, Lagampalayam, Gobichettipalayam Road</div>
-      <div>Kuttagam Post, Nambiyur (Tk), Erode - 638 462. TN.</div>
-      <div>GSTIN : 33AAXFN5545Q12A</div>
-      <div>📍 99650 29529 | n2klogistics2024@gmail.com</div>
-    </div>
-  </div>
+            {/* Company Details Box */}
+            <div style={{
+              flex: 1,
+              border: "1px solid #e0e0e0",
+              borderRadius: "5px",
+              padding: "5px",
+              backgroundColor: "#f8f9fa",
+              textAlign: "center"
+            }}>
+              <div style={{ 
+                fontSize: "16px", 
+                fontWeight: "bold", 
+                color: "#2c3e50",
+                textTransform: "uppercase",
+                marginBottom: "3px"
+              }}>
+                N2K LOGISTICS
+              </div>
+              
+              <div style={{ 
+                fontSize: "9px", 
+                color: "#555",
+                lineHeight: "1.3"
+              }}>
+                <div>H.O : S.F. No. 1/54/2, Lagampalayam, Gobichettipalayam Road</div>
+                <div>Kuttagam Post, Nambiyur (Tk), Erode - 638 462. TN.</div>
+                <div>GSTIN : 33AAXFN5545Q12A</div>
+                <div>📍 99650 29529 | n2klogistics2024@gmail.com</div>
+              </div>
+            </div>
 
-  {/* LR Details Box - Fixed Width */}
-  <div style={{
-    border: "2px solid #e74c3c",
-    borderRadius: "5px",
-    padding: "0 15px",
-    width: "180px",
-    height: "100%", // Matches logo height
-    backgroundColor: "#fff",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center"
-  }}>
-    <div style={{
-      fontSize: "16px",
-      fontWeight: "bold",
-      color: "#e74c3c",
-      marginBottom: "5px"
-    }}>
-      LR No: {lrNumber}
-    </div>
-    <div style={{
-      fontSize: "15px",
-      fontWeight: "600",
-      color: "#333"
-    }}>
-      Date: {new Date().toLocaleDateString('en-IN')}
-    </div>
-  </div>
-</div>
+            {/* LR Details Box */}
+            <div style={{
+              border: "2px solid #e74c3c",
+              borderRadius: "5px",
+              padding: "0 5px",
+              width: "150px",
+              height: "80px",
+              backgroundColor: "#fff",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center"
+            }}>
+              <div style={{
+                fontSize: "14px",
+                fontWeight: "bold",
+                color: "#e74c3c",
+                marginBottom: "5px"
+              }}>
+                LR No: {lrNumber}
+              </div>
+              <div style={{
+                fontSize: "13px",
+                fontWeight: "600",
+                color: "#333"
+              }}>
+                Date: {new Date().toLocaleDateString('en-IN')}
+              </div>
+            </div>
+          </div>
 
           {/* Order Details */}
           <div style={{ 
             border: "1px solid #e0e0e0", 
-            padding: "15px", 
-            marginBottom: "20px",
+            padding: "5px", 
+            marginBottom: "10px",
             borderRadius: "5px",
             backgroundColor: "#f8f9fa",
-            boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
+            boxShadow: "0 1px 3px rgba(0,0,0,0.1)"
           }}>
 
             {/* From and To Sections */}
             <div style={{ 
               display: "flex", 
               justifyContent: "space-between", 
-              marginBottom: "15px",
-              gap: "20px"
+              marginBottom: "10px",
+              gap: "15px"
             }}>
               <div style={{ 
                 width: "48%",
                 backgroundColor: "#f1f8fe",
-                padding: "10px",
+                padding: "4px",
                 borderRadius: "5px",
-                borderLeft: "3px solid #3498db"
+                borderLeft: "3px solid #3498db",
+                fontSize: "11px"
               }}>
                 <div style={{ 
                   fontWeight: "bold", 
                   borderBottom: "1px solid #3498db", 
-                  marginBottom: "5px",
-                  color: "#2980b9"
+                  marginBottom: "3px",
+                  color: "#2980b9",
+                  fontSize: "12px"
                 }}>
                   From:
                 </div>
@@ -943,15 +985,17 @@ export default function PlaceOrderForm({ onClose }) {
               <div style={{ 
                 width: "48%",
                 backgroundColor: "#f1f8fe",
-                padding: "10px",
+                padding: "4px",
                 borderRadius: "5px",
-                borderLeft: "3px solid #3498db"
+                borderLeft: "3px solid #3498db",
+                fontSize: "11px"
               }}>
                 <div style={{ 
                   fontWeight: "bold", 
                   borderBottom: "1px solid #3498db", 
-                  marginBottom: "5px",
-                  color: "#2980b9"
+                  marginBottom: "3px",
+                  color: "#2980b9",
+                  fontSize: "12px"
                 }}>
                   To:
                 </div>
@@ -965,12 +1009,13 @@ export default function PlaceOrderForm({ onClose }) {
             {/* Order Information */}
             <div style={{ 
               display: "grid", 
-              gridTemplateColumns: "repeat(2, 1fr)", 
-              gap: "10px",
-              marginBottom: "15px",
+              gridTemplateColumns: "repeat(3, 1fr)", 
+              gap: "4px",
+              marginBottom: "5px",
               backgroundColor: "#f5f5f5",
-              padding: "10px",
-              borderRadius: "5px"
+              padding: "2px",
+              borderRadius: "5px",
+              fontSize: "11px"
             }}>
               <div>
                 <strong style={{ color: "#16a085" }}>Payment:</strong> {formData.paymentMethod}
@@ -993,13 +1038,15 @@ export default function PlaceOrderForm({ onClose }) {
             <div style={{ 
               borderTop: "1px solid #e0e0e0", 
               borderBottom: "1px solid #e0e0e0",
-              padding: "10px 0",
-              marginBottom: "15px"
+              padding: "2px 0",
+              marginBottom: "10px",
+              fontSize: "11px"
             }}>
               <div style={{ 
                 fontWeight: "bold", 
-                marginBottom: "5px",
-                color: "#8e44ad"
+                marginBottom: "3px",
+                color: "#8e44ad",
+                fontSize: "12px"
               }}>
                 Invoice Details:
               </div>
@@ -1007,7 +1054,7 @@ export default function PlaceOrderForm({ onClose }) {
                 display: "flex", 
                 justifyContent: "space-between",
                 backgroundColor: "#f5eef8",
-                padding: "8px",
+                padding: "1px",
                 borderRadius: "5px"
               }}>
                 <div><strong>Number:</strong> {formData.invoiceNumber}</div>
@@ -1019,22 +1066,24 @@ export default function PlaceOrderForm({ onClose }) {
 
             {/* Charges */}
             <div style={{ 
-              marginBottom: "15px",
+              marginBottom: "10px",
               backgroundColor: "#f5f5f5",
-              padding: "10px",
-              borderRadius: "5px"
+              padding: "1px",
+              borderRadius: "5px",
+              fontSize: "11px"
             }}>
               <div style={{ 
                 fontWeight: "bold", 
-                marginBottom: "5px",
-                color: "#d35400"
+                marginBottom: "3px",
+                color: "#d35400",
+                fontSize: "12px"
               }}>
                 Charges:
               </div>
               <div style={{ 
                 display: "grid", 
                 gridTemplateColumns: "repeat(3, 1fr)", 
-                gap: "10px"
+                gap: "8px"
               }}>
                 <div><strong style={{ color: "#e67e22" }}>LR Charge:</strong> ₹{(Number(formData.totalCharges) * 0.13).toFixed(2)}</div>
                 <div><strong style={{ color: "#e67e22" }}>Door Delivery:</strong> ₹{formData.doorDeliveryCharge}</div>
@@ -1049,56 +1098,58 @@ export default function PlaceOrderForm({ onClose }) {
             <div style={{ 
               textAlign: "right", 
               fontWeight: "bold", 
-              fontSize: "16px",
+              fontSize: "14px",
               borderTop: "1px solid #e0e0e0",
-              paddingTop: "5px",
+              paddingTop: "3px",
               color: "#c0392b",
-              marginBottom: "30px"
+              marginBottom: "10px"
             }}>
               <strong>TOTAL CHARGES:</strong> ₹{
-                Number(formData.totalCharges) +
-                Number(formData.lrCharge) +
+                (Number(formData.totalCharges) +
+                (Number(formData.totalCharges) * 0.13) +
                 Number(formData.doorDeliveryCharge) +
                 Number(formData.hamali) +
-                Number(formData.fuelSurcharge) +
-                Number(formData.frightCharge) +
-                Number(formData.ieCharge)
+                (Number(formData.totalCharges) * 0.23) +
+                (Number(formData.totalCharges) * 0.33) +
+                Number(formData.ieCharge)).toFixed(2)
               }
             </div>
+
             {/* Footer */}
             <div style={{ 
-              marginTop: "20px",
+              marginTop: "10px",
               textAlign: "center",
-              fontSize: "12px",
+              fontSize: "10px",
               color: "#7f8c8d",
               borderTop: "1px solid #e0e0e0",
-              paddingTop: "10px"
+              paddingTop: "2px"
             }}>
-              <div style={{ marginBottom: "5px" }}>Goods received by Good condition with all documents</div>
+              <div style={{ marginBottom: "3px" }}>Goods received by Good condition with all documents</div>
               <div style={{ fontWeight: "bold", color: "#3498db" }}>I/We here by agree to be to pay all charges octroi & Taxes as applicable</div>
             </div>
+
             {/* Signature and Seal Section */}
             <div style={{
               display: "flex",
               justifyContent: "space-between",
-              marginTop: "40px",
-              paddingTop: "15px"
+              marginTop: "1px",
+              paddingTop: "1px"
             }}>
               <div style={{
                 textAlign: "center",
                 width: "45%"
               }}>
                 <div style={{
-                  height: "50px",
+                  height: "30px",
                   borderBottom: "1px solid #7f8c8d",
-                  marginBottom: "5px"
+                  marginBottom: "3px"
                 }}></div>
-                <div style={{ fontSize: "12px" }}>Customer Signature with seal</div>
+                <div style={{ fontSize: "10px" }}>Customer Signature</div>
+              </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
   );
 }
