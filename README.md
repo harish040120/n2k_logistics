@@ -341,14 +341,6 @@ We welcome contributions to the N2K Logistics platform! Please follow these step
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 📞 Support & Contact
-
-For support, questions, or business inquiries:
-
-- **Email**: support@n2klogistics.com
-- **Website**: [www.n2klogistics.com](https://www.n2klogistics.com)
-- **Phone**: +1 (555) 123-4567
-- **Address**: 123 Logistics Ave, Business District, City, State 12345
 
 ## 🙏 Acknowledgments
 
