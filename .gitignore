@@ -154,3 +154,5 @@ Thumbs.db
 config/local.js
 uploads/
 public/uploads/
+
+git remote remove origin  https://github.com/Shyam94000/N2K.git
